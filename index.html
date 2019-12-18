@@ -11,6 +11,7 @@
         padding: 0px;
         font-size: 10px;
         overflow: hidden;
+        position: relative;
     }
 
     .axis path,
@@ -75,7 +76,7 @@
     </style>
 </head>
 
-<body>
+<body onResize="window.location=window.location;">
     <div class="tooltip">
         <p class="company"></p>
         <p class="prof"></p>
@@ -110,6 +111,7 @@ var xAxis = d3.axisBottom(x).tickFormat(formatpercent);
 var yAxis = d3.axisLeft(y).tickFormat(formatpercent);
 var tooltip = d3.select(".tooltip")
     .style("visibility", "hidden")
+    .style("z-index", "10")
     .style("background-color", "white")
     .style("border", "solid")
     .style("border-width", "2px")
@@ -282,8 +284,8 @@ d3.tsv("parity_data.tsv", function(error, data) {
         .on("mousemove", function(d) {
             tooltip.style("visibility", "visible")
                 .html("" + d.company + '<br/>' + '<hr/>' + "Mid-Management: " + formatpercent(d.mid_mgmnt) + '<br/>' + "Professionals: " + formatpercent(d.prof) + '<br/>')
-                .style("left", (d3.mouse(this)[0] + 390) + "px")
-                .style("top", (d3.mouse(this)[1]) + 90 + "px")
+                .style("top", (d3.event.pageY + 16) + "px")
+                .style("left", (d3.event.pageX + 16) + "px")
             d3.select(this)
                 .style("stroke", "black")
                 .style("opacity", 1)
