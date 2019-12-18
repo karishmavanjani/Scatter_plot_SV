@@ -7,10 +7,10 @@
     body {
         font: 10px sans-serif;
         background-color: #F2F2F2;
-        overflow: hidden;
         margin: 0px;
         padding: 0px;
         font-size: 10px;
+        overflow: hidden;
     }
 
     .axis path,
@@ -29,7 +29,7 @@
     .tooltip {
         position: absolute;
         padding: 8px;
-        width: 110px;
+        width: 120px;
         opacity: 0.9;
         background-color: #3C4247;
         font: 10px "Hiragino Sans GB", "华文细黑", "STHeiti", "微软雅黑", "Microsoft YaHei", SimHei, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
@@ -62,6 +62,16 @@
         padding: 0;
         margin: 8px 0;
     }
+
+    .title {
+        font: 14px "Hiragino Sans GB", "华文细黑", "STHeiti", "微软雅黑", "Microsoft YaHei", SimHei, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+        font-style: bold;
+
+    }
+
+    .subtitle {
+        font: 10px "Hiragino Sans GB", "华文细黑", "STHeiti", "微软雅黑", "Microsoft YaHei", SimHei, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    }
     </style>
 </head>
 
@@ -71,10 +81,19 @@
         <p class="prof"></p>
         <p class="mgmt"></p>
     </div>
+    <div class="title" style="padding-top: 40px;">
+        <strong> Asians are least likely to lead big tech companies </strong>
+    </div>
+    <div class="subtitle">
+        Asians make up a greater share of Silicon Valley's technical workforce but their representation at managerial levels is absymally low.
+    </div>
+    <div class="subtitle" style="position: absolute; margin-top: 460px; margin-left: 340px">
+        Source: EEO-1 filings
+    </div>
 </body>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-var margin = { top: 20, right: 50, bottom: 30, left: 50 },
+var margin = { top: 70, right: 50, bottom: 30, left: 50 },
     width = 650 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
@@ -83,7 +102,6 @@ var x = d3.scaleLinear()
 
 var y = d3.scaleLinear()
     .range([height, 0]);
-
 
 var formatpercent = d3.format(".0%")
 
@@ -105,8 +123,17 @@ var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+svg.append("g")
+    .append("text")
+    .attr("class", "label")
+    .attr("x", 74)
+    .attr("y", 435)
+    .style("text-anchor", "end")
+    .text("Source: EEO-1 filings")
+    .style("fill", "black");
 
+d3.select("body").attr("align", "center");
 
 // function for the x grid lines
 function make_x_gridlines() {
@@ -145,6 +172,7 @@ d3.tsv("parity_data.tsv", function(error, data) {
         .style("text-anchor", "end")
         .text("Professionals")
         .style("fill", "black");
+
 
     svg.append("g")
         .attr("class", "y axis")
@@ -185,18 +213,21 @@ d3.tsv("parity_data.tsv", function(error, data) {
         .append("text")
         .attr("class", "label")
         .attr("x", 200)
-        .attr("y", 170)
+        .attr("y", 148)
         .style("text-anchor", "end")
         .text("Overrepresented in Management")
         .style("fill", "red")
     svg.append("g")
         .append("text")
+
         .attr("class", "label")
         .attr("x", 550)
-        .attr("y", 170)
+        .attr("y", 148)
         .style("text-anchor", "end")
+
         .text("Underrepresented in Management")
         .style("fill", "blue")
+
 
 
 
@@ -228,7 +259,7 @@ d3.tsv("parity_data.tsv", function(error, data) {
             .transition()
             .duration(200)
             .style("fill", color(selected_race))
-            .attr("r", 7)
+            .style("stroke", "black")
 
     }
 
@@ -250,12 +281,13 @@ d3.tsv("parity_data.tsv", function(error, data) {
         .on("mouseover", highlight)
         .on("mousemove", function(d) {
             tooltip.style("visibility", "visible")
-                .html("" + d.company + '<br/>' + '<hr/>' + "Professionals: " + formatpercent(d.prof) + '<br/>' + "Mid-Management: " + formatpercent(d.mid_mgmnt) + '<br/>')
-                .style("left", (d3.mouse(this)[0] + 70) + "px")
-                .style("top", (d3.mouse(this)[1]) + "px")
+                .html("" + d.company + '<br/>' + '<hr/>' + "Mid-Management: " + formatpercent(d.mid_mgmnt) + '<br/>' + "Professionals: " + formatpercent(d.prof) + '<br/>')
+                .style("left", (d3.mouse(this)[0] + 390) + "px")
+                .style("top", (d3.mouse(this)[1]) + 90 + "px")
             d3.select(this)
                 .style("stroke", "black")
                 .style("opacity", 1)
+                .attr("r", 7)
 
 
 
@@ -286,7 +318,7 @@ d3.tsv("parity_data.tsv", function(error, data) {
 
             "race": 'White',
             "x": 0.42,
-            "y": 0.62,
+            "y": 0.61,
 
 
         },
@@ -300,8 +332,8 @@ d3.tsv("parity_data.tsv", function(error, data) {
 
         {
             "race": 'Black and Hispanic',
-            "x": 0.06,
-            "y": 0.16
+            "x": 0.13,
+            "y": 0.05
         }
 
     ];
